@@ -1,55 +1,61 @@
 # RPI GPIO over HTTP with Docker
 
-This is a simple HTTP server that allows you to control the GPIO pins of a Raspberry Pi.
-
-Note: This doesn't need to docker to work, but in my use case I needed it to be able to run in a docker container.
+This project sets up a simple HTTP server on a Raspberry Pi, enabling remote reading of sensor data via the GPIO pins. It's specifically designed for the HC-SR04 ultrasonic sensor but can be adapted for other GPIO applications. The server is containerized using Docker for ease of deployment and consistency across different environments.
 
 ## Installation
 
-- Connect the sensor to your Raspberry Pi
-  ![rpi connector](./rpi_connecting.png)
+### Hardware Setup
 
-  - TRIG = 17
-  - ECHO = 27
+- Connect the HC-SR04 ultrasonic sensor to your Raspberry Pi:
+  - TRIG = GPIO 17
+  - ECHO = GPIO 27
+    ![RPI Connector](./rpi_connecting.png)
 
-- Clone this repo
+### Software Setup
+
+- Clone the repository:
+
+  ```bash
+  git clone https://github.com/driessenslucas/RPI-GPIO-docker.git
+  cd RPI-GPIO-docker
+  ```
+
+- Start the server using Docker Compose:
+
+  ```bash
+  docker-compose up -d
+  ```
+
+### Accessing Sensor Data
+
+- Open a web browser and navigate to `http://<your-rpi-ip>:5000/sensor/` to view the distance measured by the sensor.
+
+## Explanation
+
+- Raspberry Pi 5 and other models do not easily support remote GPIO control. This project provides a solution using a web server built with Flask, a Python micro-framework, known for its simplicity and ease of use.
+- The Docker container requires privileged access and specific device mappings to interact with the Raspberry Pi's GPIO pins:
+
+  ```dockerfile
+  devices:
+    - /dev/gpiomem0:/dev/gpiomem0
+    - /dev/gpiomem1:/dev/gpiomem1
+    - /dev/gpiomem2:/dev/gpiomem2
+    - /dev/gpiomem3:/dev/gpiomem3
+    - /dev/gpiomem4:/dev/gpiomem4
+  privileged: true
+  ```
+
+### Running Without Docker
+
+If you prefer not to use Docker, you can start the server directly:
 
 ```bash
-git clone https://github.com/driessenslucas/RPI-GPIO-docker.git
-cd RPI-GPIO-docker
+sudo python3 app.py
 ```
 
-- Run docker-compose
+Afterward, access the sensor data as mentioned above.
 
-```bash
-docker-compose up -d
-```
+## Notes
 
-- Open your browser and go to `http://<your-rpi-ip>:5000/sensor/` to see the distance measured by the sensor.
-- You can now control the GPIO pins of your Raspberry Pi. In this demo I use a hc-sr04 ultrasonic sensor as a demo.
-
-## Eplanation
-
-- The Raspberry pi 5, doesnt easily support remote GPIO control. So this is a solution to the problem, You don't have to use flask, there are many other options. But I like flask because it's easy to use and it's written in python.
-
-- For the python application in the docker container to be able to control the GPIO pins, we need to mount the gpiomem devices. This is done in the docker-compose file.
-- This docker container needs to run in privileged mode, so it can access the GPIO pins. This is also done in the docker-compose file.
-
-```dockerfile
-    devices:
-     - /dev/gpiomem0:/dev/gpiomem0
-     - /dev/gpiomem1:/dev/gpiomem1
-     - /dev/gpiomem2:/dev/gpiomem2
-     - /dev/gpiomem3:/dev/gpiomem3
-     - /dev/gpiomem4:/dev/gpiomem4
-
-    privileged: true
-```
-
-- Without docker just run this command to start the server:
-
-```bash
-  sudo python3 app.py
-```
-
-after that you can go to `http://<your-rpi-ip>:5000/sensor/` and you'll also see the distance measured by the sensor.
+- Ensure your Raspberry Pi's IP address is known for accessing the server. You can find this by running `hostname -I` on your Raspberry Pi.
+- This setup is primarily designed for reading sensor data. However, the framework can be extended for other types of GPIO interactions.

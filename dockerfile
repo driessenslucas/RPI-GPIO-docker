@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY . .
 
-EXPOSE 5500
+EXPOSE 5000
 
 # Install any needed packages specified in requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
