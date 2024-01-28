@@ -7,14 +7,14 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./:/usr/src/app
-    ports: 
-      - "5500:5500"
+    ports:
+      - '5000:5000'
     restart: always
     devices:
-     - /dev/gpiomem0:/dev/gpiomem0
-     - /dev/gpiomem1:/dev/gpiomem1
-     - /dev/gpiomem2:/dev/gpiomem2
-     - /dev/gpiomem3:/dev/gpiomem3
-     - /dev/gpiomem4:/dev/gpiomem4
-     
+      - /dev/gpiomem0:/dev/gpiomem0
+      - /dev/gpiomem1:/dev/gpiomem1
+      - /dev/gpiomem2:/dev/gpiomem2
+      - /dev/gpiomem3:/dev/gpiomem3
+      - /dev/gpiomem4:/dev/gpiomem4
+
     privileged: true

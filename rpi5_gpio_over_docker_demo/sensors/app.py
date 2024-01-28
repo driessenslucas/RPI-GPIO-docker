@@ -1,7 +1,6 @@
-from flask import Flask, Response, render_template
+from flask import Flask
 from gpiozero import DistanceSensor
 from time import sleep
-from signal import pause
 
 app = Flask(__name__)
 
@@ -23,4 +22,4 @@ def get_sensor_value():
          return "Error reading sensor"
 
 if __name__ == '__main__':
-  app.run(debug=True, host="0.0.0.0", port='5500')
+  app.run(debug=True, host="0.0.0.0", port='5000')
