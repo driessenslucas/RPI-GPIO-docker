@@ -5,10 +5,10 @@ This is a simple HTTP server that allows you to control the GPIO pins of a Raspb
 ## Installation
 
 - Connect the sensor to your Raspberry Pi
-  ![rpi connector](image.png)
+  ![rpi connector](./rpi_connecting.png)
 
-  - TRIG = 23
-  - ECHO = 24
+  - TRIG = 17
+  - ECHO = 27
 
 - Clone this repo
 
